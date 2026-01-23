@@ -1,4 +1,5 @@
 import sys
+import csv
 from pyspark.sql import SparkSession, Window
 from pyspark.sql.functions import (
     col, count, sum as _sum, mean, stddev, when,
@@ -330,14 +331,34 @@ try:
                 .option("header", "true") \
                 .csv(f"{OUTPUT_PATH}/airport_summary")
         else:
-            # Local Windows: Convert to Pandas and save (avoids Hadoop Windows native library issues)
+            # Local Windows: Collect data and write manually (avoids Hadoop Windows native library issues)
             print(f"\nWriting anomalies to: {OUTPUT_PATH}/detected_anomalies.csv", flush=True)
-            anomalies_pdf = all_anomalies.toPandas()
-            anomalies_pdf.to_csv(f"{OUTPUT_PATH}/detected_anomalies.csv", index=False)
+
+            # Collect anomalies data
+            anomalies_rows = all_anomalies.collect()
+
+            # Write anomalies CSV
+            with open(f"{OUTPUT_PATH}/detected_anomalies.csv", 'w', newline='', encoding='utf-8') as f:
+                writer = csv.writer(f)
+                # Write header
+                writer.writerow(all_anomalies.columns)
+                # Write data
+                for row in anomalies_rows:
+                    writer.writerow(row)
 
             print(f"Writing airport summary to: {OUTPUT_PATH}/airport_anomaly_summary.csv", flush=True)
-            summary_pdf = airport_summary.toPandas()
-            summary_pdf.to_csv(f"{OUTPUT_PATH}/airport_anomaly_summary.csv", index=False)
+
+            # Collect summary data
+            summary_rows = airport_summary.collect()
+
+            # Write summary CSV
+            with open(f"{OUTPUT_PATH}/airport_anomaly_summary.csv", 'w', newline='', encoding='utf-8') as f:
+                writer = csv.writer(f)
+                # Write header
+                writer.writerow(airport_summary.columns)
+                # Write data
+                for row in summary_rows:
+                    writer.writerow(row)
 
         print("\n" + "="*80, flush=True)
         print("SUCCESS: Anomaly detection complete!", flush=True)
