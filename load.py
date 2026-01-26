@@ -19,7 +19,7 @@ SNOWFLAKE_WAREHOUSE = "COMPUTE_WH"
 SNOWFLAKE_TABLE = "AIRPORT_DAILY_STATS"
 
 # Data Source Configuration
-S3_INPUT_PATH = "s3://flight-test-data-bucket/output/airport_daily_stats.csv"
+S3_INPUT_PATH = "s3://flight-analysis-s3/data/output/airport_daily_stats/"
 LOCAL_INPUT_PATH = "c:/Users/leojl/Documents/Training/test2/data/output/airport_daily_stats.csv"
 
 # Load Mode Options: "overwrite", "append", "error", "ignore"

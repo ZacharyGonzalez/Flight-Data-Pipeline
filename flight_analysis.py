@@ -7,11 +7,11 @@ from pyspark.sql.functions import col, count, sum as _sum, when, round as _round
 # Configuration
 LOCAL_INPUT_PATH = 'c:/Users/leojl/Documents/Training/test2/data/input'
 LOCAL_OUTPUT_PATH = 'c:/Users/leojl/Documents/Training/test2/data/output'
-S3_INPUT_PATH = 's3://flight-test-data-bucket/input'
-S3_OUTPUT_PATH = 's3://flight-test-data-bucket/output'
+S3_INPUT_PATH = 's3://flight-analysis-s3/data/input'
+S3_OUTPUT_PATH = 's3://flight-analysis-s3/data/output'
 
 # Set to True when running on EMR
-RUNNING_ON_EMR = False
+RUNNING_ON_EMR = True
 
 # Start Spark Session
 spark = SparkSession.builder \
